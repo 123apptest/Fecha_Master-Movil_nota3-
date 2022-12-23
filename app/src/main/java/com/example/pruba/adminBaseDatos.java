@@ -13,7 +13,7 @@ public class adminBaseDatos extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table usuario (rut text primary key,clave text primary key, pregunta text, contesta text)");
+        db.execSQL("create table usuario (rut text primary key,clave text , pregunta text, contesta text)");
     }
 
     @Override
