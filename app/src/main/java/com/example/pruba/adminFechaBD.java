@@ -14,7 +14,7 @@ public class adminFechaBD extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table fecha (titulo text primary key, evento text,lugar text)");
+        db.execSQL("create table fecha (titulo text primary key, evento text, lugar text)");
     }
 
     @Override

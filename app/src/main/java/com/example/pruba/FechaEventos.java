@@ -1,8 +1,10 @@
 package com.example.pruba;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -90,15 +92,38 @@ public class FechaEventos extends AppCompatActivity {
     }
 
     private void eliminar() {
-        if(indiceActual >= 0 && indiceActual < losFecha.size()) {
-            losFecha.remove(indiceActual);
-            limpiarPantalla();
-        }
+
+
+
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(FechaEventos.this);
+        alert.setMessage("Desa eliminar datos?").setCancelable(false)
+                .setPositiveButton("si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(indiceActual >= 0 && indiceActual < losFecha.size()) {
+                            losFecha.remove(indiceActual);
+                            limpiarPantalla();
+                        }
+                    }
+                })
+                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alert.create();
+        alertDialog.setTitle("Eliminar datos");
+        alertDialog.show();
+
+
     }
+
 
     private void grabar() {
         String titulo, evento, lugar,importancia = "",observacion = "",tiempo = "";
-        boolean eventoOK = true;
+
 
         titulo = et_titulo.getText().toString();
         evento = et_evento.getText().toString();
@@ -107,15 +132,11 @@ public class FechaEventos extends AppCompatActivity {
         observacion = spnObser.getSelectedItem().toString();
         tiempo = spnTiempo.getSelectedItem().toString();
 
-        for(Fecha f : losFecha){
-            if(f.getTitulo().equals(titulo)) {
-                eventoOK = false;
-                break;
-            }
+
             if(titulo.isEmpty() || evento.isEmpty() ||lugar.isEmpty() || spnImport.getSelectedItemPosition() == 0 ||spnObser.getSelectedItemPosition() == 0 ||spnTiempo.getSelectedItemPosition() == 0){
                 et_titulo.setError("Ingrese complecto datos");
             }else {
-                if(eventoOK) {
+
                     Fecha fe = new Fecha(titulo, evento, lugar,importancia,observacion,tiempo);
                     losFecha.add(fe);
 
@@ -124,14 +145,12 @@ public class FechaEventos extends AppCompatActivity {
                     tvPag.setText((indiceActual + 1) + " de " + losFecha.size());
                     Toast.makeText(FechaEventos.this, "Grabado exitosamente", Toast.LENGTH_SHORT).show();
                     limpiarPantalla();
-                }else{
-                    et_titulo.setError("Rut ya está ingresado");
-                }
+
             }
 
         }
 
-    }
+
 
     private void grabarBaseDatos(Fecha fe) {
         try{
